@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.txsoft.constructioncalculator.ui.main.home.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_source"
+        android:name="com.txsoft.constructioncalculator.ui.main.source.SourceFragment"
+        android:label="@string/source"
+        tools:layout="@layout/fragment_source" />
+
+    <fragment
+        android:id="@+id/nav_saved"
+        android:name="com.txsoft.constructioncalculator.ui.main.saved.SavedFragment"
+        android:label="@string/saved"
+        tools:layout="@layout/fragment_saved" />
+    <fragment
+        android:id="@+id/nav_shapes_container"
+        android:name="com.txsoft.constructioncalculator.ui.main.shapes.ShapesContainerFragment"
+        android:label="Shapes" />
+    <fragment
+        android:id="@+id/nav_materials_container"
+        android:name="com.txsoft.constructioncalculator.ui.main.materials.MaterialsContainerFragment"
+        android:label="Materials" />
+</navigation>

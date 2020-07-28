@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">ConstructionCalculator</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="settings">Settings</string>
+    <string name="share">Share</string>
+    <string name="home">Home</string>
+    <string name="source">Source</string>
+    <string name="saved">Saved</string>
+    <string name="info">How to use</string>
+    <string name="rate_us">Rate us</string>
+
+    <string name="tab_shapes_cons">Constructing</string>
+    <string name="tab_shapes_geo">Geometric</string>
+    <string name="tab_mat_metals">Metals</string>
+    <string name="tab_mat_wood">Wood</string>
+    <string name="tab_mat_other">Other</string>
+
+</resources>
