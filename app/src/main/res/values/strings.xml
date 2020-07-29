@@ -20,4 +20,45 @@
     <string name="tab_mat_wood">Wood</string>
     <string name="tab_mat_other">Other</string>
 
+    //shapes
+    <string name="angle">angle</string>
+    <string name="beam">beam</string>
+    <string name="channel">channel</string>
+    <string name="flat_bar">flat_bar</string>
+    <string name="hexag_bar">hexagonal_bar</string>
+    <string name="hexag_hex">hexagonal_hex</string>
+    <string name="hexag_tube">hexagonal_tube</string>
+    <string name="pipe">pipe</string>
+    <string name="roundBar">roundBar</string>
+    <string name="square_bar">square_bar</string>
+    <string name="square_tube">square_tubing</string>
+    <string name="t_bar">t_bar</string>
+
+    //materials
+    <string name="gold">Gold</string>
+    <string name="silver">Silver</string>
+    <string name="platinum">Platinum</string>
+    <string name="copper">Copper</string>
+    <string name="tin">Tin</string>
+    <string name="cast_iron">Cast-iron</string>
+    <string name="bronze">Bronze</string>
+    <string name="aluminium">Aluminium</string>
+    <string name="brass">Brass</string>
+    <string name="chrome">Chrome</string>
+
+    <string name="density">density</string>
+    <string name="length">Length</string>
+    <string name="width">Width</string>
+    <string name="height">Height</string>
+    <string name="diameter">Diameter</string>
+    <string name="thickness">Thickness</string>
+    <string name="side">Side</string>
+    <string name="weight">Weight</string>
+    <string name="volume">Volume</string>
+    <string name="price">Price</string>
+
+    //units
+    <string name="metric">Metric</string>
+    <string name="imperial">Imperial</string>
+
 </resources>
