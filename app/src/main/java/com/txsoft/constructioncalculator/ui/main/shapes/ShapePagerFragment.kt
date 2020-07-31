@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.models.Form
 import com.txsoft.constructioncalculator.ui.main.MainActivity
+import kotlinx.android.synthetic.main.fragment_materials_pager.*
 import kotlinx.android.synthetic.main.fragment_shape_pager.*
 
 class ShapePagerFragment(private val _build: Boolean) : Fragment() {
@@ -35,10 +36,16 @@ class ShapePagerFragment(private val _build: Boolean) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recycler_shapes.setHasFixedSize(true)
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
         val adapterRecyclerShapes = AdapterRecyclerShapes(activity, forms) {
         }
-        recycler_shapes.adapter = adapterRecyclerShapes
+        recycler_shapes.apply {
+            setHasFixedSize(true)
+            adapter = adapterRecyclerShapes
+        }
     }
 
 }

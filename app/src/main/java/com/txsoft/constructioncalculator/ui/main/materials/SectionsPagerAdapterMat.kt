@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.txsoft.constructioncalculator.R
+import com.txsoft.constructioncalculator.models.MaterialType
+import com.txsoft.constructioncalculator.models.MaterialType.*
 
 
 class SectionsPagerAdapterMat(private val context: Context, fm: FragmentManager) :
@@ -18,7 +20,12 @@ class SectionsPagerAdapterMat(private val context: Context, fm: FragmentManager)
 
 
     override fun getItem(position: Int): Fragment {
-        return MaterialsPagerFragment();
+        val type = when (position) {
+            0 -> METAL
+            1 -> WOOD
+            else -> OTHER
+        }
+        return MaterialsPagerFragment(type)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

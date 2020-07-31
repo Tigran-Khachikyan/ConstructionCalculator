@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:layout_marginTop="1dp"
+        android:padding="8dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ic_material"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:src="@drawable/ic_material"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_material_rec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aluminium"
+            android:textSize="20sp"
+            app:fontFamily="@font/rubik_medium"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_density_material_rec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="density: 56.2kg/cm3"
+            app:fontFamily="@font/rubik"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/tv_material_rec"
+            app:layout_constraintRight_toRightOf="@id/tv_material_rec"
+            app:layout_constraintTop_toBottomOf="@id/tv_material_rec" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
