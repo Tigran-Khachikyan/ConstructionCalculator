@@ -1,4 +1,4 @@
-package com.txsoft.constructioncalculator.models
+package com.txsoft.constructioncalculator.models.enums
 
 enum class MaterialType {
     METAL,

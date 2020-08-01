@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="com.txsoft.constructioncalculator.ui.main.home.HomeFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_start_calculation"
+            app:destination="@id/nav_shapes" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_source"
@@ -23,11 +27,42 @@
         android:label="@string/saved"
         tools:layout="@layout/fragment_saved" />
     <fragment
-        android:id="@+id/nav_shapes_container"
-        android:name="com.txsoft.constructioncalculator.ui.main.shapes.ShapesContainerFragment"
-        android:label="Shapes" />
-    <fragment
         android:id="@+id/nav_materials_container"
         android:name="com.txsoft.constructioncalculator.ui.main.materials.MaterialsContainerFragment"
-        android:label="Materials" />
+        android:label="Materials" >
+        <argument
+            android:name="shape_selected"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="default" />
+        <action
+            android:id="@+id/action_start_calculation"
+            app:destination="@id/nav_calculation" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_shapes"
+        android:name="com.txsoft.constructioncalculator.ui.main.shapes.ShapeFragment"
+        android:label="Shapes" >
+        <argument
+            android:name="calculation"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_pass_shape"
+            app:destination="@id/nav_materials_container" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_calculation"
+        android:name="com.txsoft.constructioncalculator.ui.main.calculation.CalculationFragment"
+        android:label="Calculation"
+        tools:layout="@layout/fragment_calculation" >
+        <argument
+            android:name="form"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="material"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
 </navigation>

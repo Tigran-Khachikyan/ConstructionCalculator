@@ -1,7 +1,8 @@
 package com.txsoft.constructioncalculator.models
 
 import androidx.room.*
-import com.txsoft.constructioncalculator.models.Form.*
+import com.txsoft.constructioncalculator.models.enums.Form
+import com.txsoft.constructioncalculator.models.enums.Form.*
 
 @Entity(tableName = "SHAPE")
 data class Shape(

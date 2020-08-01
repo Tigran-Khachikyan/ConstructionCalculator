@@ -5,8 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.txsoft.constructioncalculator.R
-import com.txsoft.constructioncalculator.models.MaterialType
-import com.txsoft.constructioncalculator.models.MaterialType.*
+import com.txsoft.constructioncalculator.models.enums.MaterialType.*
 
 
 class SectionsPagerAdapterMat(private val context: Context, fm: FragmentManager) :

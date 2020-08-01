@@ -19,7 +19,7 @@
             android:id="@+id/btnGoToShapes"
             android:layout_width="132dp"
             android:layout_height="40dp"
-            android:onClick="@{()->navController.navigate(@id/nav_shapes_container)}"
+            android:onClick="@{()->navController.navigate(@id/nav_shapes)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

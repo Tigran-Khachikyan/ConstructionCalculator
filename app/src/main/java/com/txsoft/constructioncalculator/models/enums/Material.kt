@@ -1,7 +1,8 @@
-package com.txsoft.constructioncalculator.models
+package com.txsoft.constructioncalculator.models.enums
 
 import com.txsoft.constructioncalculator.R
-import com.txsoft.constructioncalculator.models.MaterialType.*
+import com.txsoft.constructioncalculator.models.enums.MaterialType.*
+import com.txsoft.constructioncalculator.models.Unit
 
 enum class Material(val nameRes: Int, val density: Double, val type: MaterialType) {
 

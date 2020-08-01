@@ -14,8 +14,8 @@
     <string name="info">How to use</string>
     <string name="rate_us">Rate us</string>
 
-    <string name="tab_shapes_cons">Constructing</string>
-    <string name="tab_shapes_geo">Geometric</string>
+    <string name="construction_forms">Construction forms</string>
+    <string name="geometric_forms">Geometric forms</string>
     <string name="tab_mat_metals">Metals</string>
     <string name="tab_mat_wood">Wood</string>
     <string name="tab_mat_other">Other</string>
@@ -60,5 +60,7 @@
     //units
     <string name="metric">Metric</string>
     <string name="imperial">Imperial</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

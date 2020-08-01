@@ -1,8 +1,6 @@
 package com.txsoft.constructioncalculator.models
 
-import android.content.Context
-import androidx.room.*
-import java.util.*
+import com.txsoft.constructioncalculator.models.enums.Material
 
 class Model constructor(
     val shape: Shape,
