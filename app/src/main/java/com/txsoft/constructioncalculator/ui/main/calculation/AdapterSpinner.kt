@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.databinding.HolderMaterialRecyclerBinding
+import com.txsoft.constructioncalculator.databinding.HolderMaterialRecyclerBindingImpl
 import com.txsoft.constructioncalculator.models.Unit
 import com.txsoft.constructioncalculator.models.enums.Material
 
@@ -36,7 +37,7 @@ class AdapterSpinner(
         val binding =
             HolderMaterialRecyclerBinding.inflate(LayoutInflater.from(context), parent, false)
         val side = context.resources.getDimension(R.dimen.material_holder_icon_small).toInt()
-        binding.icMaterial.layoutParams = ConstraintLayout.LayoutParams(side,side)
+        binding.icMaterial.layoutParams = ConstraintLayout.LayoutParams(side, side)
         val mat = getItem(position)
         mat?.run {
             binding.tvMaterialRec.text = context.getString(nameRes)

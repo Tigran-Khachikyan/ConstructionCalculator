@@ -1,4 +1,4 @@
-package com.txsoft.constructioncalculator.ui.main.shapes
+package com.txsoft.constructioncalculator.ui.main
 
 import android.content.Context
 import android.content.Context.WINDOW_SERVICE

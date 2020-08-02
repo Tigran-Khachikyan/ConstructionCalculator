@@ -12,6 +12,7 @@ import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.models.enums.Form
 import com.txsoft.constructioncalculator.models.enums.FormType
 import com.txsoft.constructioncalculator.models.enums.FormType.*
+import com.txsoft.constructioncalculator.ui.main.AdapterRecyclerShapes
 import com.txsoft.constructioncalculator.ui.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_shape.*
 

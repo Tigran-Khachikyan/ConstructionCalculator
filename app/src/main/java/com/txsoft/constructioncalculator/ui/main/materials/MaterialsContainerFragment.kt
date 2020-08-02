@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.models.enums.Form
 import com.txsoft.constructioncalculator.models.enums.Material
@@ -52,4 +54,10 @@ class MaterialsContainerFragment : Fragment() {
             findNavController().navigate(direction)
         }
     }
+
+/*    val fab: FloatingActionButton = findViewById(R.id.fab)
+    fab.setOnClickListener { view ->
+        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show()
+    }*/
 }

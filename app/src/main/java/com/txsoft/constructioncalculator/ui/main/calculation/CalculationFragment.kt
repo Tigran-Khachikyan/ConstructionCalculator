@@ -6,19 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Spinner
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
-import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.databinding.FragmentCalculationBinding
 import com.txsoft.constructioncalculator.models.Unit
 import com.txsoft.constructioncalculator.models.enums.Form
 import com.txsoft.constructioncalculator.models.enums.Material
-import com.txsoft.constructioncalculator.ui.main.shapes.AdapterRecyclerShapes
-import com.txsoft.constructioncalculator.ui.main.shapes.ShapeFragmentDirections
+import com.txsoft.constructioncalculator.ui.main.AdapterRecyclerShapes
 import kotlinx.android.synthetic.main.fragment_calculation.*
 
 class CalculationFragment : Fragment() {
@@ -39,6 +34,7 @@ class CalculationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerShapesMarked()
+        initRecyclerInputFields()
         initSpinnerMaterial()
     }
 
@@ -75,6 +71,15 @@ class CalculationFragment : Fragment() {
         }
     }
 
+    private fun initRecyclerInputFields() {
+
+        val adapterRecyclerInput = AdapterRecyclerInput(requireContext(), form!!, true) {}
+        recycler_input.apply {
+            setHasFixedSize(false)
+            adapter = adapterRecyclerInput
+        }
+    }
+
     private fun initSpinnerMaterial() {
 
         val adapterSpinner = AdapterSpinner(
@@ -91,5 +96,6 @@ class CalculationFragment : Fragment() {
             }
         }
     }
+
 
 }

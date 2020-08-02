@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/lay_input_field"
-        style="@style/inputLayout"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:helperText="input your first "
-        app:shapeAppearanceOverlay="@style/cut">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_input_field"
-            style="@style/inputText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lay_input_field"
+            style="@style/inputLayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="wrap_content"
+            app:helperText="input your first "
+            app:shapeAppearanceOverlay="@style/cut">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_input_field"
+                style="@style/inputText"
+                android:gravity="center|start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-</FrameLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </FrameLayout>
+</layout>
