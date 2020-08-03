@@ -1,6 +1,7 @@
 package com.txsoft.constructioncalculator.ui.main.calculation
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +39,7 @@ class AdapterSpinner(
             HolderMaterialRecyclerBinding.inflate(LayoutInflater.from(context), parent, false)
         val side = context.resources.getDimension(R.dimen.material_holder_icon_small).toInt()
         binding.icMaterial.layoutParams = ConstraintLayout.LayoutParams(side, side)
+        binding.root.background = context.getDrawable(R.drawable.back_spinner_holder)
         val mat = getItem(position)
         mat?.run {
             binding.tvMaterialRec.text = context.getString(nameRes)

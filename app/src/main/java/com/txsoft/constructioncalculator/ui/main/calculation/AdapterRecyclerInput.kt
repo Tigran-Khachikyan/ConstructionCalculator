@@ -14,13 +14,26 @@ import com.txsoft.constructioncalculator.models.getParamsArray
 
 class AdapterRecyclerInput(
     private val context: Context,
-    private val form: Form,
-    private val byLength: Boolean,
     private val func: (Form) -> Unit
 ) :
     RecyclerView.Adapter<AdapterRecyclerInput.Holder>() {
 
-    private var fields: Array<Params> = getParamsArray(form, byLength)
+    private var form: Form = Form.BEAM
+    private var byLength: Boolean = true
+    private var fields: Array<Params>? = null
+
+    fun setFormSelected(form: Form) {
+        this.form = form
+        fields = getParamsArray(form, byLength)
+        notifyDataSetChanged()
+    }
+
+    fun setScenario(byLength: Boolean) {
+        this.byLength = byLength
+        fields = getParamsArray(form, byLength)
+        notifyDataSetChanged()
+    }
+
 
     inner class Holder(private val binding: HolderInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -35,10 +48,12 @@ class AdapterRecyclerInput(
         return Holder(binding)
     }
 
-    override fun getItemCount(): Int = fields.size
+    override fun getItemCount(): Int = fields?.size ?: 0
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(fields[position])
+        fields?.run {
+            holder.bind(get(position))
+        }
     }
 
 

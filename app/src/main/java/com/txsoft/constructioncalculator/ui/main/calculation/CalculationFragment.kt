@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -13,20 +15,29 @@ import com.txsoft.constructioncalculator.databinding.FragmentCalculationBinding
 import com.txsoft.constructioncalculator.models.Unit
 import com.txsoft.constructioncalculator.models.enums.Form
 import com.txsoft.constructioncalculator.models.enums.Material
+import com.txsoft.constructioncalculator.ui.DELAY_TIME_SCROLLING
 import com.txsoft.constructioncalculator.ui.main.AdapterRecyclerShapes
 import kotlinx.android.synthetic.main.fragment_calculation.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 
 class CalculationFragment : Fragment() {
 
-    private var form: Form? = null
-    private var material: Material? = null
+    private var formSelected: Form? = null
+    private var materialSelected: Material? = null
     private lateinit var binding: FragmentCalculationBinding
+    private lateinit var calcViewModel: CalcViewModel
+    private lateinit var adapterRecyclerInput: AdapterRecyclerInput
+    private var jobDelayScrolling: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+        calcViewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
         initData()
         binding = FragmentCalculationBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.calcViewModel = this.calcViewModel
         return binding.root
     }
 
@@ -36,6 +47,12 @@ class CalculationFragment : Fragment() {
         initRecyclerShapesMarked()
         initRecyclerInputFields()
         initSpinnerMaterial()
+        initObservers()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        jobDelayScrolling?.cancel()
     }
 
 
@@ -43,8 +60,9 @@ class CalculationFragment : Fragment() {
         arguments?.let {
             val formName = CalculationFragmentArgs.fromBundle(it).form
             val materialName = CalculationFragmentArgs.fromBundle(it).material
-            form = Form.valueOf(formName)
-            material = Material.valueOf(materialName)
+            formSelected = Form.valueOf(formName)
+            materialSelected = Material.valueOf(materialName)
+            calcViewModel.setForm(formSelected)
         }
     }
 
@@ -65,15 +83,17 @@ class CalculationFragment : Fragment() {
                 PagerSnapHelper(),
                 onSnapPositionChangeListener = object : OnSnapPositionChangeListener {
                     override fun onSnapPositionChange(position: Int) {
+                        calcViewModel.setForm(forms[position])
                     }
                 })
             adapter = adapterRecyclerShapes
+            scrollToPosition(forms.indexOf(formSelected))
         }
     }
 
     private fun initRecyclerInputFields() {
 
-        val adapterRecyclerInput = AdapterRecyclerInput(requireContext(), form!!, true) {}
+        adapterRecyclerInput = AdapterRecyclerInput(requireContext()) {}
         recycler_input.apply {
             setHasFixedSize(false)
             adapter = adapterRecyclerInput
@@ -94,7 +114,28 @@ class CalculationFragment : Fragment() {
                 ) {
                 }
             }
+            setSelection(Material.values().indexOf(materialSelected))
         }
+    }
+
+    private fun initObservers() {
+
+        calcViewModel.getForm().observe(viewLifecycleOwner, Observer {
+            it?.let {
+                jobDelayScrolling = CoroutineScope(Main).launch {
+                    delay(DELAY_TIME_SCROLLING)
+                    adapterRecyclerInput.setFormSelected(it)
+                }
+            }
+        })
+
+        calcViewModel.getScenario().observe(viewLifecycleOwner, Observer {
+            jobDelayScrolling = GlobalScope.launch(Main) {
+                delay(DELAY_TIME_SCROLLING)
+                adapterRecyclerInput.setScenario(it)
+            }
+        })
+
     }
 
 

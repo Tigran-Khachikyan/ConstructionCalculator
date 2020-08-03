@@ -2,8 +2,7 @@
 <ripple android:color="@color/colorAccent" xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <corners android:radius="10dp"/>
-            <solid android:color="@color/colorFonLight"/>
+            <solid android:color="@android:color/white"/>
         </shape>
     </item>
 </ripple>
