@@ -74,4 +74,8 @@
     <string name="DIAMETER">diameter</string>
     <string name="SIDE">side</string>
     <string name="COUNT">count</string>
+
+    <string name="invalid_null">Parameter is required!</string>
+    <string name="invalid_0">0.0 is invalid input!</string>
+    <string name="invalid_other">wrong input....</string>
 </resources>

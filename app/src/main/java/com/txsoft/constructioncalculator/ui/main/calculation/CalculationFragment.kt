@@ -6,15 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.databinding.FragmentCalculationBinding
 import com.txsoft.constructioncalculator.models.Unit
 import com.txsoft.constructioncalculator.models.enums.Form
+import com.txsoft.constructioncalculator.models.enums.InvalidInputType
+import com.txsoft.constructioncalculator.models.enums.InvalidInputType.*
 import com.txsoft.constructioncalculator.models.enums.Material
+import com.txsoft.constructioncalculator.models.enums.Params
+import com.txsoft.constructioncalculator.models.enums.Params.*
 import com.txsoft.constructioncalculator.ui.DELAY_TIME_SCROLLING
 import com.txsoft.constructioncalculator.ui.main.AdapterRecyclerShapes
 import kotlinx.android.synthetic.main.fragment_calculation.*
@@ -29,6 +35,8 @@ class CalculationFragment : Fragment() {
     private lateinit var calcViewModel: CalcViewModel
     private lateinit var adapterRecyclerInput: AdapterRecyclerInput
     private var jobDelayScrolling: Job? = null
+    private var inputMap: HashMap<Params, Double?>? = null
+    private var invalidInputMap: HashMap<Params, InvalidInputType>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -47,6 +55,7 @@ class CalculationFragment : Fragment() {
         initRecyclerShapesMarked()
         initRecyclerInputFields()
         initSpinnerMaterial()
+        initBtnCalculate()
         initObservers()
     }
 
@@ -93,11 +102,41 @@ class CalculationFragment : Fragment() {
 
     private fun initRecyclerInputFields() {
 
-        adapterRecyclerInput = AdapterRecyclerInput(requireContext()) {}
+        adapterRecyclerInput = AdapterRecyclerInput(this::getInputParams)
         recycler_input.apply {
             setHasFixedSize(false)
             adapter = adapterRecyclerInput
         }
+    }
+
+    private fun getInputParams(map: HashMap<Params, Double?>) {
+
+        inputMap = map
+        val btnBackgroundRes =
+            if (map.values.contains(0.0) || map.apply { remove(COUNT) }.values.contains(null)) R.drawable.back_button_calc else R.drawable.back_button_calc_ready
+        btn_calculate.background = resources.getDrawable(btnBackgroundRes, null)
+    }
+
+
+    private fun getInvalidInput(map: HashMap<Params, Double?>): HashMap<Params, InvalidInputType>? {
+
+        invalidInputMap = null
+        map.forEach { entry ->
+            @Suppress("ReplaceWithEnumMap")
+            val type = when (entry.value) {
+                null -> {
+                    if (invalidInputMap == null) invalidInputMap = hashMapOf()
+                    NULL
+                }
+                0.0 -> {
+                    if (invalidInputMap == null) invalidInputMap = hashMapOf()
+                    ZERO
+                }
+                else -> null
+            }
+            type?.let { invalidInputMap!![entry.key] = type }
+        }
+        return invalidInputMap
     }
 
     private fun initSpinnerMaterial() {
@@ -116,6 +155,21 @@ class CalculationFragment : Fragment() {
             }
             setSelection(Material.values().indexOf(materialSelected))
         }
+    }
+
+    private fun initBtnCalculate() {
+
+        btn_calculate.setOnClickListener {
+            val invalidInputMap = inputMap?.let { getInvalidInput(it) }
+            invalidInputMap?.let {
+                adapterRecyclerInput.setInvalidFields(it)
+            } ?: calculate()
+        }
+    }
+
+    private fun calculate() {
+
+        Toast.makeText(requireContext(), "calculation", Toast.LENGTH_LONG).show()
     }
 
     private fun initObservers() {

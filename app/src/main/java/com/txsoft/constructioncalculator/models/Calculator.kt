@@ -33,3 +33,10 @@ fun getParamsArray(form: Form, byLength: Boolean): Array<Params> {
     val array = getParamsArray(form)
     return array.filter { param -> param != exceptionParam }.toTypedArray()
 }
+
+fun createMapForValues(array: Array<Params>?): HashMap<Params, Double?> {
+
+    val result = HashMap<Params, Double?>()
+    array?.forEach { param -> result[param] = null }
+    return result
+}
