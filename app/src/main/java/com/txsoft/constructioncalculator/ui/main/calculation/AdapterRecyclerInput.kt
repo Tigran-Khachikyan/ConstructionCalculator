@@ -5,54 +5,48 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.txsoft.constructioncalculator.databinding.HolderInputBinding
-import com.txsoft.constructioncalculator.models.createMapForValues
 import com.txsoft.constructioncalculator.models.enums.Form
 import com.txsoft.constructioncalculator.models.enums.InvalidInputType
 import com.txsoft.constructioncalculator.models.enums.Params
-import com.txsoft.constructioncalculator.models.enums.Params.*
 import com.txsoft.constructioncalculator.models.getParamsArray
 
 
 class AdapterRecyclerInput(
-    private val onInput: (HashMap<Params, Double?>) -> Unit
+    private var form: Form,
+    private var byLength: Boolean,
+    private val onInput: (Params, Double?) -> Unit
 ) :
     RecyclerView.Adapter<AdapterRecyclerInput.Holder>() {
 
-    private var form: Form = Form.BEAM
-    private var byLength: Boolean = true
-    private var fields: Array<Params>? = null
+    private var fields: Array<Params>
     private var invalidFields: HashMap<Params, InvalidInputType>? = null
-    private var map: HashMap<Params, Double?>? = null
+    private var clearInput: Boolean? = true // null -> clear only length_weight, false - don't clear
+
+    init {
+        fields = getParamsArray(form, byLength)
+    }
 
     fun setInvalidFields(_invalidFields: HashMap<Params, InvalidInputType>) {
         invalidFields = _invalidFields
+        clearInput = false
         notifyDataSetChanged()
     }
 
     fun setFormSelected(form: Form) {
         this.form = form
+        invalidFields?.clear()
+        clearInput = true
         fields = getParamsArray(form, byLength)
-        map = createMapForValues(fields)
         notifyDataSetChanged()
     }
 
     fun setScenario(byLength: Boolean) {
         this.byLength = byLength
+        clearInput = null
         fields = getParamsArray(form, byLength)
-        map = map?.apply {
-            if (byLength) {
-                if (containsKey(WEIGHT)) {
-                    remove(WEIGHT)
-                    put(LENGTH, null)
-                }
-            } else {
-                if (containsKey(LENGTH)) {
-                    remove(LENGTH)
-                    put(WEIGHT, null)
-                }
-            }
-        }
         notifyDataSetChanged()
     }
 
@@ -60,24 +54,37 @@ class AdapterRecyclerInput(
     inner class Holder(private val binding: HolderInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(param: Params) {
+        private fun TextInputLayout.showError(type: InvalidInputType) {
+            isErrorEnabled = true
+            error = resources.getString(type.textRes)
+        }
 
+        private fun TextInputLayout.dismissError() {
+            isErrorEnabled = false
+        }
+
+        private fun TextInputEditText.clearOnlyFirstField(param: Params) {
+            if (param == Params.LENGTH || param == Params.WEIGHT)
+                text?.clear()
+        }
+
+        fun bind(param: Params) {
 
             binding.layInputField.apply {
                 hint = context.getString(param.nameRes)
                 invalidFields?.run {
-                    get(param)?.run {
-                        isErrorEnabled = true
-                        error = resources.getString(textRes)
-                    }
-                }
+                    get(param)?.let {
+                        showError(it)
+                    } ?: dismissError()
+                } ?: dismissError()
             }
 
+
+
             binding.etInputField.apply {
-                val initText = map?.run { get(param)?.toString() ?: "" } ?: ""
-                setText(initText)
+                clearInput?.let { if (it) text?.clear() } ?: clearOnlyFirstField(param)
                 addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(s: Editable?) {
+                    override fun afterTextChanged(input: Editable?) {
                     }
 
                     override fun beforeTextChanged(
@@ -88,16 +95,11 @@ class AdapterRecyclerInput(
                     override fun onTextChanged(
                         input: CharSequence?, start: Int, before: Int, count: Int
                     ) {
-                        fields?.run {
-                            val curParam = get(adapterPosition)
-                            val value = input?.let {
-                                if (it.toString() != "") it.toString().toDouble() else null
-                            }
-                            map?.run {
-                                put(curParam, value)
-                                onInput(this)
-                            }
+                        val curParam = fields[adapterPosition]
+                        val value = input?.let {
+                            if (it.toString() != "") it.toString().toDouble() else null
                         }
+                        onInput(curParam, value)
                     }
                 })
             }
@@ -110,12 +112,11 @@ class AdapterRecyclerInput(
         return Holder(binding)
     }
 
-    override fun getItemCount(): Int = fields?.size ?: 0
+    override fun getItemCount(): Int = fields.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        fields?.run {
-            holder.bind(get(position))
-        }
+
+        holder.bind(fields[position])
     }
 
 

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.databinding.FragmentCalculationBinding
 import com.txsoft.constructioncalculator.models.Unit
@@ -21,6 +22,7 @@ import com.txsoft.constructioncalculator.models.enums.InvalidInputType.*
 import com.txsoft.constructioncalculator.models.enums.Material
 import com.txsoft.constructioncalculator.models.enums.Params
 import com.txsoft.constructioncalculator.models.enums.Params.*
+import com.txsoft.constructioncalculator.models.getParamsValuesMap
 import com.txsoft.constructioncalculator.ui.DELAY_TIME_SCROLLING
 import com.txsoft.constructioncalculator.ui.main.AdapterRecyclerShapes
 import kotlinx.android.synthetic.main.fragment_calculation.*
@@ -29,13 +31,14 @@ import kotlinx.coroutines.Dispatchers.Main
 
 class CalculationFragment : Fragment() {
 
-    private var formSelected: Form? = null
-    private var materialSelected: Material? = null
+    private lateinit var formSelected: Form
+    private var scenarioByLength: Boolean = true
+    private lateinit var materialSelected: Material
     private lateinit var binding: FragmentCalculationBinding
     private lateinit var calcViewModel: CalcViewModel
     private lateinit var adapterRecyclerInput: AdapterRecyclerInput
     private var jobDelayScrolling: Job? = null
-    private var inputMap: HashMap<Params, Double?>? = null
+    private lateinit var inputMap: HashMap<Params, Double?>
     private var invalidInputMap: HashMap<Params, InvalidInputType>? = null
 
     override fun onCreateView(
@@ -64,15 +67,21 @@ class CalculationFragment : Fragment() {
         jobDelayScrolling?.cancel()
     }
 
-
+    @Suppress("ReplaceWithEnumMap")
     private fun initData() {
+
+        inputMap = hashMapOf()
+        formSelected = Form.PIPE
+        materialSelected = Material.ALUMINIUM
         arguments?.let {
             val formName = CalculationFragmentArgs.fromBundle(it).form
             val materialName = CalculationFragmentArgs.fromBundle(it).material
             formSelected = Form.valueOf(formName)
             materialSelected = Material.valueOf(materialName)
-            calcViewModel.setForm(formSelected)
         }
+        calcViewModel.setForm(formSelected)
+        calcViewModel.setScenario(scenarioByLength)
+        calcViewModel.setMaterial(materialSelected)
     }
 
     private fun initRecyclerShapesMarked() {
@@ -102,19 +111,19 @@ class CalculationFragment : Fragment() {
 
     private fun initRecyclerInputFields() {
 
-        adapterRecyclerInput = AdapterRecyclerInput(this::getInputParams)
+        adapterRecyclerInput = AdapterRecyclerInput(formSelected, scenarioByLength, this::onInput)
         recycler_input.apply {
             setHasFixedSize(false)
             adapter = adapterRecyclerInput
         }
     }
 
-    private fun getInputParams(map: HashMap<Params, Double?>) {
+    private fun onInput(param: Params, value: Double?) {
 
-        inputMap = map
-        val btnBackgroundRes =
-            if (map.values.contains(0.0) || map.apply { remove(COUNT) }.values.contains(null)) R.drawable.back_button_calc else R.drawable.back_button_calc_ready
-        btn_calculate.background = resources.getDrawable(btnBackgroundRes, null)
+        inputMap[param] = value
+        val map = inputMap
+        val ready = !map.values.contains(0.0) && !map.apply { remove(COUNT) }.values.contains(null)
+        calcViewModel.setReadyForCalculation(ready)
     }
 
 
@@ -160,8 +169,9 @@ class CalculationFragment : Fragment() {
     private fun initBtnCalculate() {
 
         btn_calculate.setOnClickListener {
-            val invalidInputMap = inputMap?.let { getInvalidInput(it) }
+            val invalidInputMap = getInvalidInput(inputMap)
             invalidInputMap?.let {
+                Snackbar.make(binding.root, "Not all params are completed!", 3000)
                 adapterRecyclerInput.setInvalidFields(it)
             } ?: calculate()
         }
@@ -176,14 +186,17 @@ class CalculationFragment : Fragment() {
 
         calcViewModel.getForm().observe(viewLifecycleOwner, Observer {
             it?.let {
+                formSelected = it
                 jobDelayScrolling = CoroutineScope(Main).launch {
                     delay(DELAY_TIME_SCROLLING)
+                    inputMap = getParamsValuesMap(it, scenarioByLength)
                     adapterRecyclerInput.setFormSelected(it)
                 }
             }
         })
 
         calcViewModel.getScenario().observe(viewLifecycleOwner, Observer {
+            scenarioByLength = it
             jobDelayScrolling = GlobalScope.launch(Main) {
                 delay(DELAY_TIME_SCROLLING)
                 adapterRecyclerInput.setScenario(it)
