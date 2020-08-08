@@ -39,7 +39,6 @@ class CalculationFragment : Fragment() {
     private lateinit var adapterRecyclerInput: AdapterRecyclerInput
     private var jobDelayScrolling: Job? = null
     private lateinit var inputMap: HashMap<Params, Double?>
-    private var invalidInputMap: HashMap<Params, InvalidInputType>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -111,42 +110,20 @@ class CalculationFragment : Fragment() {
 
     private fun initRecyclerInputFields() {
 
-        adapterRecyclerInput = AdapterRecyclerInput(formSelected, scenarioByLength, this::onInput)
+        adapterRecyclerInput =
+            AdapterRecyclerInput(requireContext(), formSelected, scenarioByLength) { param, value ->
+                inputMap[param] = value
+                val map = HashMap(inputMap)
+                val ready =
+                    !map.values.contains(0.0) && !map.apply { remove(COUNT) }.values.contains(null)
+                calcViewModel.setReadyForCalculation(ready)
+            }
         recycler_input.apply {
             setHasFixedSize(false)
             adapter = adapterRecyclerInput
         }
     }
 
-    private fun onInput(param: Params, value: Double?) {
-
-        inputMap[param] = value
-        val map = inputMap
-        val ready = !map.values.contains(0.0) && !map.apply { remove(COUNT) }.values.contains(null)
-        calcViewModel.setReadyForCalculation(ready)
-    }
-
-
-    private fun getInvalidInput(map: HashMap<Params, Double?>): HashMap<Params, InvalidInputType>? {
-
-        invalidInputMap = null
-        map.forEach { entry ->
-            @Suppress("ReplaceWithEnumMap")
-            val type = when (entry.value) {
-                null -> {
-                    if (invalidInputMap == null) invalidInputMap = hashMapOf()
-                    NULL
-                }
-                0.0 -> {
-                    if (invalidInputMap == null) invalidInputMap = hashMapOf()
-                    ZERO
-                }
-                else -> null
-            }
-            type?.let { invalidInputMap!![entry.key] = type }
-        }
-        return invalidInputMap
-    }
 
     private fun initSpinnerMaterial() {
 
@@ -169,11 +146,13 @@ class CalculationFragment : Fragment() {
     private fun initBtnCalculate() {
 
         btn_calculate.setOnClickListener {
-            val invalidInputMap = getInvalidInput(inputMap)
-            invalidInputMap?.let {
-                Snackbar.make(binding.root, "Not all params are completed!", 3000)
-                adapterRecyclerInput.setInvalidFields(it)
-            } ?: calculate()
+            adapterRecyclerInput.setResultMap(inputMap)
+            calcViewModel.isReadyForCalculation().value?.let {
+                if (it)
+                    calculate()
+                else
+                    Snackbar.make(binding.root, "Not all parameters are set for computation!", 2200).show()
+            }
         }
     }
 
@@ -202,7 +181,6 @@ class CalculationFragment : Fragment() {
                 adapterRecyclerInput.setScenario(it)
             }
         })
-
     }
 
 

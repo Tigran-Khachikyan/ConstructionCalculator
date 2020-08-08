@@ -27,11 +27,11 @@ fun getParamsArray(form: Form): Array<Params> {
     }
 }
 
-fun getParamsArray(form: Form, byLength: Boolean): Array<Params> {
+fun getParamsArray(form: Form, byLength: Boolean): List<Params> {
 
     val exceptionParam = if (byLength) WEIGHT else LENGTH
     val array = getParamsArray(form)
-    return array.filter { param -> param != exceptionParam }.toTypedArray()
+    return array.filter { param -> param != exceptionParam }
 }
 
 fun getParamsValuesMap(form: Form, byLength: Boolean): HashMap<Params, Double?> {
