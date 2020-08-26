@@ -1,17 +1,20 @@
 package com.txsoft.constructioncalculator.ui.main.calculation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.databinding.FragmentCalculationBinding
@@ -25,6 +28,7 @@ import com.txsoft.constructioncalculator.models.enums.Params.*
 import com.txsoft.constructioncalculator.models.getParamsValuesMap
 import com.txsoft.constructioncalculator.ui.DELAY_TIME_SCROLLING
 import com.txsoft.constructioncalculator.ui.main.AdapterRecyclerShapes
+import kotlinx.android.synthetic.main.bottom_sheet_dialog.*
 import kotlinx.android.synthetic.main.fragment_calculation.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
@@ -114,6 +118,7 @@ class CalculationFragment : Fragment() {
             AdapterRecyclerInput(requireContext(), formSelected, scenarioByLength) { param, value ->
                 inputMap[param] = value
                 val map = HashMap(inputMap)
+                Log.d("sjdak65", "map: ${map}")
                 val ready =
                     !map.values.contains(0.0) && !map.apply { remove(COUNT) }.values.contains(null)
                 calcViewModel.setReadyForCalculation(ready)
@@ -151,14 +156,14 @@ class CalculationFragment : Fragment() {
                 if (it)
                     calculate()
                 else
-                    Snackbar.make(binding.root, "Not all parameters are set for computation!", 2200).show()
+                    Snackbar.make(binding.root, "Not all parameters are set for computation!", 2200)
+                        .show()
             }
         }
     }
 
     private fun calculate() {
-
-        Toast.makeText(requireContext(), "calculation", Toast.LENGTH_LONG).show()
+        openBottomSheetDialogResult()
     }
 
     private fun initObservers() {
@@ -174,13 +179,35 @@ class CalculationFragment : Fragment() {
             }
         })
 
-        calcViewModel.getScenario().observe(viewLifecycleOwner, Observer {
-            scenarioByLength = it
+        calcViewModel.getScenario().observe(viewLifecycleOwner, Observer { byLength ->
+            scenarioByLength = byLength
+            if (byLength)
+                inputMap.remove(WEIGHT)
+            else
+                inputMap.remove(LENGTH)
+
             jobDelayScrolling = GlobalScope.launch(Main) {
                 delay(DELAY_TIME_SCROLLING)
-                adapterRecyclerInput.setScenario(it)
+                adapterRecyclerInput.setScenario(byLength)
             }
         })
+    }
+
+    private fun openBottomSheetDialogResult() {
+
+        val bsd = BottomSheetDialog(requireContext(), R.style.bottomSheetDialog)
+        val view = LayoutInflater.from(requireContext())
+            .inflate(R.layout.bottom_sheet_dialog, lay_bottom_sheet_container)
+        val btnSave: AppCompatTextView = view.findViewById(R.id.tv_save_res)
+        val btnShare: AppCompatTextView = view.findViewById(R.id.tv_share_res)
+        btnSave.setOnClickListener {
+            bsd.dismiss()
+        }
+        btnShare.setOnClickListener {
+            bsd.dismiss()
+        }
+        bsd.setContentView(view)
+        bsd.show()
     }
 
 
