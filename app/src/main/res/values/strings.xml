@@ -64,16 +64,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string name="LENGTH">length</string>
-    <string name="WEIGHT">weight</string>
-    <string name="WIDTH">width</string>
-    <string name="HEIGHT">height</string>
-    <string name="THICKNESS">thickness</string>
-    <string name="THICKNESS_1">thickness 1</string>
-    <string name="THICKNESS_2">thickness 2</string>
-    <string name="DIAMETER">diameter</string>
-    <string name="SIDE">side</string>
-    <string name="COUNT">count</string>
+    <string name="LENGTH">Length</string>
+    <string name="WEIGHT">Weight</string>
+    <string name="WIDTH">Width</string>
+    <string name="HEIGHT">Height</string>
+    <string name="THICKNESS">Thickness</string>
+    <string name="THICKNESS_1">Thickness 1</string>
+    <string name="THICKNESS_2">Thickness 2</string>
+    <string name="DIAMETER">Diameter</string>
+    <string name="SIDE">Side</string>
+    <string name="COUNT">Count</string>
+    <string name="VOLUME">Volume</string>
 
     <string name="invalid_null">Parameter is required!</string>
     <string name="invalid_0">0.0 is invalid input!</string>

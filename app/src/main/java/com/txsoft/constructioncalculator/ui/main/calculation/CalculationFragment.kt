@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +20,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.databinding.FragmentCalculationBinding
+import com.txsoft.constructioncalculator.models.Model
+import com.txsoft.constructioncalculator.models.Shape
 import com.txsoft.constructioncalculator.models.Unit
 import com.txsoft.constructioncalculator.models.enums.Form
 import com.txsoft.constructioncalculator.models.enums.InvalidInputType
@@ -118,7 +122,6 @@ class CalculationFragment : Fragment() {
             AdapterRecyclerInput(requireContext(), formSelected, scenarioByLength) { param, value ->
                 inputMap[param] = value
                 val map = HashMap(inputMap)
-                Log.d("sjdak65", "map: ${map}")
                 val ready =
                     !map.values.contains(0.0) && !map.apply { remove(COUNT) }.values.contains(null)
                 calcViewModel.setReadyForCalculation(ready)
@@ -128,7 +131,6 @@ class CalculationFragment : Fragment() {
             adapter = adapterRecyclerInput
         }
     }
-
 
     private fun initSpinnerMaterial() {
 
@@ -163,7 +165,101 @@ class CalculationFragment : Fragment() {
     }
 
     private fun calculate() {
-        openBottomSheetDialogResult()
+
+        val shape: Shape = when (formSelected) {
+
+            Form.T_BAR -> Shape.TBar(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                width = inputMap[WIDTH]!!,
+                height = inputMap[HEIGHT]!!,
+                thickness = inputMap[THICKNESS]!!
+            )
+
+            Form.SQUARE_TUBE -> Shape.SquareTube(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                width = inputMap[WIDTH]!!,
+                height = inputMap[HEIGHT]!!,
+                thickness = inputMap[THICKNESS]!!
+            )
+
+            Form.SQUARE_BAR -> Shape.SquareBar(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                side = inputMap[SIDE]!!
+            )
+
+            Form.PIPE -> Shape.Pipe(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                thickness = inputMap[THICKNESS]!!,
+                diameter = inputMap[DIAMETER]!!
+            )
+
+            Form.ROUND_BAR -> Shape.RoundBar(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                diameter = inputMap[DIAMETER]!!
+            )
+
+            Form.HEXAGONAL_TUBE -> Shape.HexagonalTube(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                side = inputMap[SIDE]!!,
+                diameter = inputMap[DIAMETER]!!
+            )
+
+            Form.HEXAGONAL_HEX -> Shape.HexagonalHex(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                width = inputMap[WIDTH]!!,
+                thickness = inputMap[THICKNESS]!!
+            )
+
+            Form.HEXAGONAL_BAR -> Shape.HexagonalBar(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                height = inputMap[HEIGHT]!!
+            )
+
+            Form.FLAT_BAR -> Shape.FlatBar(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                width = inputMap[WIDTH]!!,
+                height = inputMap[HEIGHT]!!
+            )
+
+            Form.CHANNEL -> Shape.Channel(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                width = inputMap[WIDTH]!!,
+                height = inputMap[HEIGHT]!!,
+                thickness = inputMap[THICKNESS]!!
+            )
+
+            Form.BEAM -> Shape.Beam(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                width = inputMap[WIDTH]!!,
+                height = inputMap[HEIGHT]!!,
+                thickness1 = inputMap[THICKNESS_1]!!,
+                thickness2 = inputMap[THICKNESS_2]!!
+            )
+
+            Form.ANGLE -> Shape.Angle(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                width = inputMap[WIDTH]!!,
+                height = inputMap[HEIGHT]!!,
+                thickness = inputMap[THICKNESS]!!
+            )
+
+            else -> Shape.Angle(
+                length = if (scenarioByLength) inputMap[LENGTH] else null,
+                width = inputMap[WIDTH]!!,
+                height = inputMap[HEIGHT]!!,
+                thickness = inputMap[THICKNESS]!!
+            )
+        }
+        val model: Model? = if (scenarioByLength)
+            Model.createByLength(shape, materialSelected)
+        else
+            Model.createByWeight(shape, materialSelected, inputMap[WEIGHT]!!)
+
+        if (model != null)
+            openBottomSheetDialogResult(model)
+        else Snackbar.make(binding.root, "Something went wrong, try again!", 2200)
+            .show()
+
     }
 
     private fun initObservers() {
@@ -193,13 +289,28 @@ class CalculationFragment : Fragment() {
         })
     }
 
-    private fun openBottomSheetDialogResult() {
+    private fun openBottomSheetDialogResult(model: Model) {
 
         val bsd = BottomSheetDialog(requireContext(), R.style.bottomSheetDialog)
         val view = LayoutInflater.from(requireContext())
             .inflate(R.layout.bottom_sheet_dialog, lay_bottom_sheet_container)
         val btnSave: AppCompatTextView = view.findViewById(R.id.tv_save_res)
         val btnShare: AppCompatTextView = view.findViewById(R.id.tv_share_res)
+        val tvLengthOrWeight: AppCompatTextView = view.findViewById(R.id.tv_res_weight_or_length)
+        val tvVolume: AppCompatTextView = view.findViewById(R.id.tv_res_volume)
+        val tvSurface: AppCompatTextView = view.findViewById(R.id.tv_res_surface)
+        val ivShape: AppCompatImageView = view.findViewById(R.id.iv_res_shape)
+
+        ivShape.setImageDrawable(
+            ContextCompat.getDrawable(requireContext(), model.shape.form.imageRes)
+        )
+        val textLengthOrWeight =
+            if (scenarioByLength) getString(R.string.LENGTH) + " : " + model.weight.toString()
+            else getString(R.string.WEIGHT) + " : " + model.shape.length.toString()
+        tvLengthOrWeight.text = textLengthOrWeight
+
+        val volume = getString(R.string.VOLUME) + " : " + model.shape.volume.toString()
+        tvVolume.text = volume
         btnSave.setOnClickListener {
             bsd.dismiss()
         }
@@ -209,6 +320,5 @@ class CalculationFragment : Fragment() {
         bsd.setContentView(view)
         bsd.show()
     }
-
 
 }
