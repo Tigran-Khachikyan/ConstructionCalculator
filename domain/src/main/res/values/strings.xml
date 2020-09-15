@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">data</string>
+
+    <string name="LENGTH">Length</string>
+    <string name="WEIGHT">Weight</string>
+    <string name="WIDTH">Width</string>
+    <string name="HEIGHT">Height</string>
+    <string name="THICKNESS">Thickness</string>
+    <string name="THICKNESS_1">Thickness 1</string>
+    <string name="THICKNESS_2">Thickness 2</string>
+    <string name="DIAMETER">Diameter</string>
+    <string name="SIDE">Side</string>
+    <string name="COUNT">Count</string>
+    <string name="VOLUME">Volume</string>
+
+
+    //shapes
+    <string name="angle">angle</string>
+    <string name="beam">beam</string>
+    <string name="channel">channel</string>
+    <string name="flat_bar">flat_bar</string>
+    <string name="hexag_bar">hexagonal_bar</string>
+    <string name="hexag_hex">hexagonal_hex</string>
+    <string name="hexag_tube">hexagonal_tube</string>
+    <string name="pipe">pipe</string>
+    <string name="roundBar">roundBar</string>
+    <string name="square_bar">square_bar</string>
+    <string name="square_tube">square_tubing</string>
+    <string name="t_bar">t_bar</string>
+
+    //materials
+    <string name="gold">Gold</string>
+    <string name="silver">Silver</string>
+    <string name="platinum">Platinum</string>
+    <string name="copper">Copper</string>
+    <string name="tin">Tin</string>
+    <string name="cast_iron">Cast-iron</string>
+    <string name="bronze">Bronze</string>
+    <string name="aluminium">Aluminium</string>
+    <string name="brass">Brass</string>
+    <string name="chrome">Chrome</string>
+
+    //material type
+    <string name="metal">Metal</string>
+    <string name="wood">Wood</string>
+    <string name="other">Other</string>
+
+    //form type
+    <string name="construction">Construction</string>
+    <string name="geometric">Geometric</string>
+
+    //units
+    <string name="metric">Metric</string>
+    <string name="imperial">Imperial</string>
+
+</resources>
