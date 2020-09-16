@@ -9,24 +9,24 @@ import com.txsoft.domain.models.form.Form
 
 class UIAdapterForm(private val context: Context) : AdapterUI<Form, IForm> {
 
-    override fun fromDTO(enum: Form): IForm {
+    override fun fromDTO(dto: Form): IForm {
         return object : IForm {
             override val name: String
-                get() = context.resources.getString(enum.nameRes)
+                get() = context.resources.getString(dto.nameRes)
             override val image: Drawable
-                get() = ContextCompat.getDrawable(context, enum.imageRes)!!
+                get() = ContextCompat.getDrawable(context, dto.imageRes)!!
             override val markedImageRes: Drawable
-                get() = ContextCompat.getDrawable(context, enum.markedImageRes)!!
+                get() = ContextCompat.getDrawable(context, dto.markedImageRes)!!
             override val type: String
-                get() = context.resources.getString(enum.type.nameRes)
+                get() = context.resources.getString(dto.type.nameRes)
         }
     }
 
 
-    override fun fromUi(model: IForm): Form {
+    override fun fromUi(ui: IForm): Form {
         return Form.values().find { enum ->
-            context.resources.getString(enum.nameRes) == model.name &&
-                    context.resources.getString(enum.type.nameRes) == model.type
+            context.resources.getString(enum.nameRes) == ui.name &&
+                    context.resources.getString(enum.type.nameRes) == ui.type
         } ?: Form.DEFAULT
     }
 }

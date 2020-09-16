@@ -6,8 +6,8 @@ import com.txsoft.domain.models.form.Form
 
 class DataAdapterForm : AdapterData<Form, FormEntity> {
 
-    override fun fromDTO(enum: Form): FormEntity {
-        return FormEntity(enum.nameRes, enum.imageRes, enum.markedImageRes, enum.type.name)
+    override fun fromDTO(dto: Form): FormEntity {
+        return FormEntity(dto.nameRes, dto.imageRes, dto.markedImageRes, dto.type.name)
     }
 
     override fun fromEntity(entity: FormEntity): Form {

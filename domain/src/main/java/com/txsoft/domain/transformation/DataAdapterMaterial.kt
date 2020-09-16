@@ -7,8 +7,8 @@ import com.txsoft.domain.models.material.Material
 class DataAdapterMaterial :
     AdapterData<Material, MaterialEntity> {
 
-    override fun fromDTO(enum: Material): MaterialEntity {
-        return MaterialEntity(enum.nameRes, enum.density, enum.colorRes, enum.type.name)
+    override fun fromDTO(dto: Material): MaterialEntity {
+        return MaterialEntity(dto.nameRes, dto.density, dto.colorRes, dto.type.name)
     }
 
     override fun fromEntity(entity: MaterialEntity): Material {

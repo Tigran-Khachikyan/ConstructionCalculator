@@ -1,6 +1,7 @@
 package com.txsoft.domain
 
-interface AdapterUI<A, B> {
-    fun fromDTO(a: A): B
-    fun fromUi(b: B): A
+interface AdapterUI<DTO, UI> {
+
+    fun fromDTO(dto: DTO): UI
+    fun fromUi(ui: UI): DTO
 }

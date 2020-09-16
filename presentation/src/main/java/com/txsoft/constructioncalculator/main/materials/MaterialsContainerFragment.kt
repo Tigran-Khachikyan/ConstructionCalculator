@@ -12,13 +12,14 @@ import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.interfaces.OnResourceInflater
 import com.txsoft.constructioncalculator.main.MainActivity
 import com.txsoft.constructioncalculator.models.IMaterial
+import com.txsoft.domain.use_cases.MaterialsInflater
 import kotlinx.android.synthetic.main.fragment_materials_container.*
 
 
 class MaterialsContainerFragment : Fragment() {
 
     private lateinit var materialsViewModel: MaterialsViewModel
-    private lateinit var resource: OnResourceInflater<IMaterial>
+    private val resource: OnResourceInflater<IMaterial> by lazy { MaterialsInflater(requireContext()) }
 
     private lateinit var mainActivity: MainActivity
     val form by lazy {

@@ -15,12 +15,13 @@ import com.txsoft.constructioncalculator.main.AdapterRecyclerShapes
 import com.txsoft.constructioncalculator.main.MainActivity
 import com.txsoft.constructioncalculator.models.IForm
 import com.txsoft.constructioncalculator.models.IMaterial
+import com.txsoft.domain.use_cases.FormsInflater
 import kotlinx.android.synthetic.main.fragment_shape.*
 
 class ShapeFragment() : Fragment() {
 
     private lateinit var activity: MainActivity
-    private lateinit var resource: OnResourceInflater<IForm>
+    private val resource: OnResourceInflater<IForm> by lazy { FormsInflater(requireContext()) }
     private val inCalculation by lazy {
         arguments?.let {
             ShapeFragmentArgs.fromBundle(it).calculation
