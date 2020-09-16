@@ -10,13 +10,17 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.txsoft.constructioncalculator.FORM_TYPE_CONSTRUCTION
 import com.txsoft.constructioncalculator.R
+import com.txsoft.constructioncalculator.interfaces.OnResourceInflater
 import com.txsoft.constructioncalculator.main.AdapterRecyclerShapes
 import com.txsoft.constructioncalculator.main.MainActivity
+import com.txsoft.constructioncalculator.models.IForm
+import com.txsoft.constructioncalculator.models.IMaterial
 import kotlinx.android.synthetic.main.fragment_shape.*
 
 class ShapeFragment() : Fragment() {
 
     private lateinit var activity: MainActivity
+    private lateinit var resource: OnResourceInflater<IForm>
     private val inCalculation by lazy {
         arguments?.let {
             ShapeFragmentArgs.fromBundle(it).calculation
@@ -43,17 +47,20 @@ class ShapeFragment() : Fragment() {
     }
 
 
-    private fun RecyclerView.init(type: Int) {
-        val forms = UseCaseGetForms(requireContext()).getAllForms()
-        val sorted =
-            if (type == FORM_TYPE_CONSTRUCTION) forms.filter { it.typeIsConst }
-            else forms.filter { !it.typeIsConst }
-        val adapterRecyclerShapes = AdapterRecyclerShapes(activity, sorted, inCalculation, false) {
+    private fun RecyclerView.init(type: String) {
+        val forms = getFormsTypedList(type)
+        val adapterRecyclerShapes =
+            AdapterRecyclerShapes(activity, forms, inCalculation, marked = false) {
 
-            findNavController().navigate(ShapeFragmentDirections.actionPassShape(it.name))
-        }
+                findNavController().navigate(ShapeFragmentDirections.actionPassShape(it.name))
+            }
         setHasFixedSize(true)
         adapter = adapterRecyclerShapes
+    }
+
+
+    private fun getFormsTypedList(type: String): List<IForm>? {
+        return resource.getTypedResourceMap()[type]
     }
 
 }

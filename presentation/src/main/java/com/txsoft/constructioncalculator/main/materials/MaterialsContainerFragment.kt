@@ -8,18 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.txsoft.constructioncalculator.R
-import com.txsoft.constructioncalculator.models.enums.Form
-import com.txsoft.constructioncalculator.models.enums.Material
-import com.txsoft.constructioncalculator.ui.main.MainActivity
+import com.txsoft.constructioncalculator.interfaces.OnResourceInflater
+import com.txsoft.constructioncalculator.main.MainActivity
+import com.txsoft.constructioncalculator.models.IMaterial
 import kotlinx.android.synthetic.main.fragment_materials_container.*
 
 
 class MaterialsContainerFragment : Fragment() {
 
     private lateinit var materialsViewModel: MaterialsViewModel
+    private lateinit var resource: OnResourceInflater<IMaterial>
+
     private lateinit var mainActivity: MainActivity
     val form by lazy {
         arguments?.let {
@@ -42,9 +42,9 @@ class MaterialsContainerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sectionsPagerAdapter = SectionsPagerAdapterMat(mainActivity, childFragmentManager)
-        view_pager_materials.adapter = sectionsPagerAdapter
-        tabs_materials.setupWithViewPager(view_pager_materials)
+        val sectionsPagerAdapter = MaterialPagerAdapter(resource, childFragmentManager)
+        pagerMaterials.adapter = sectionsPagerAdapter
+        tabsMaterials.setupWithViewPager(pagerMaterials)
     }
 
     fun startCalculation(_material: String) {
@@ -54,6 +54,7 @@ class MaterialsContainerFragment : Fragment() {
             findNavController().navigate(direction)
         }
     }
+
 
 /*    val fab: FloatingActionButton = findViewById(R.id.fab)
     fab.setOnClickListener { view ->

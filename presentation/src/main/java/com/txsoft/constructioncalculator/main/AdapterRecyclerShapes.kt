@@ -51,9 +51,9 @@ class AdapterRecyclerShapes(
                     }
                 }
                 if (!marked)
-                    setImageDrawable(ContextCompat.getDrawable(context, form.image))
+                    setImageDrawable(form.image)
                 else
-                    setImageDrawable(ContextCompat.getDrawable(context, form.markedImageRes))
+                    setImageDrawable(form.markedImageRes)
 
                 setOnClickListener {
                     if (inCalculation)

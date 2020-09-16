@@ -1,9 +1,7 @@
 package com.txsoft.constructioncalculator.models
 
-interface IMaterial {
+interface IMaterial : IResource {
 
-    val name: String
     val density: Double
-    val type: String
     val color: Int
 }

@@ -18,18 +18,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.databinding.FragmentCalculationBinding
-import com.txsoft.constructioncalculator.models.IModel
-import com.txsoft.constructioncalculator.models.IShape
+import com.txsoft.constructioncalculator.models.*
 import com.txsoft.constructioncalculator.models.Unit
-import com.txsoft.constructioncalculator.models.enums.Form
-import com.txsoft.constructioncalculator.models.enums.InvalidInputType
-import com.txsoft.constructioncalculator.models.enums.InvalidInputType.*
-import com.txsoft.constructioncalculator.models.enums.Material
-import com.txsoft.constructioncalculator.models.enums.Params
-import com.txsoft.constructioncalculator.models.enums.Params.*
-import com.txsoft.constructioncalculator.models.getParamsValuesMap
-import com.txsoft.constructioncalculator.ui.DELAY_TIME_SCROLLING
-import com.txsoft.constructioncalculator.ui.main.AdapterRecyclerShapes
 import kotlinx.android.synthetic.main.bottom_sheet_dialog.*
 import kotlinx.android.synthetic.main.fragment_calculation.*
 import kotlinx.coroutines.*
@@ -37,7 +27,7 @@ import kotlinx.coroutines.Dispatchers.Main
 
 class CalculationFragment : Fragment() {
 
-    private lateinit var formSelected: Form
+    private lateinit var formSelected: IForm
     private var scenarioByLength: Boolean = true
     private lateinit var materialSelected: Material
     private lateinit var binding: FragmentCalculationBinding

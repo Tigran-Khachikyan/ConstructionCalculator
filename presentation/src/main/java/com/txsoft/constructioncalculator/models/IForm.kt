@@ -2,9 +2,7 @@ package com.txsoft.constructioncalculator.models
 
 import android.graphics.drawable.Drawable
 
-interface IForm {
-    val name: String
+interface IForm : IResource {
     val image: Drawable
     val markedImageRes: Drawable
-    val type: String
 }

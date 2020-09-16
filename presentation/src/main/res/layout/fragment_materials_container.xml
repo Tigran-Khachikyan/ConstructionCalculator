@@ -10,16 +10,16 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs_materials"
+            android:id="@+id/tabsMaterials"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager_materials"
+            android:id="@+id/pagerMaterials"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/tabs_materials"
+            app:layout_constraintTop_toBottomOf="@id/tabsMaterials"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

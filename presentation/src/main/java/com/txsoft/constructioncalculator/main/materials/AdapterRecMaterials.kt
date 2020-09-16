@@ -1,41 +1,38 @@
 package com.txsoft.constructioncalculator.main.materials
 
-import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import com.txsoft.constructioncalculator.R
 import com.txsoft.constructioncalculator.databinding.HolderMaterialRecyclerBinding
-import com.txsoft.constructioncalculator.models.enums.Material
+import com.txsoft.constructioncalculator.models.IMaterial
 
 
-class AdapterRecyclerMaterials(
-    private val context: Context,
-    private val materials: List<Material>?,
+class AdapterRecMaterials(
+    private val materials: List<IMaterial>?,
     private var unit: com.txsoft.constructioncalculator.models.Unit,
     private val inCalculation: Boolean,
-    private val func: (Material) -> Unit
+    private val func: (IMaterial) -> Unit
 ) :
-    RecyclerView.Adapter<AdapterRecyclerMaterials.Holder>() {
+    RecyclerView.Adapter<AdapterRecMaterials.Holder>() {
 
     inner class Holder(private val binding: HolderMaterialRecyclerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(material: Material) {
+        private val context = binding.root.context
+
+        fun bind(material: IMaterial) {
             binding.apply {
-                tvMaterialRec.text = context.getString(material.nameRes)
+                tvMaterialRec.text = material.name
                 val densityText = context.getString(R.string.density) + " : " + material.density
                 tvDensityMaterialRec.text = densityText
-                val side = context.resources.getDimension(R.dimen.material_holder_icon_large).toInt()
-                binding.icMaterial.layoutParams = ConstraintLayout.LayoutParams(side,side)
+                val side =
+                    context.resources.getDimension(R.dimen.material_holder_icon_large).toInt()
+                binding.icMaterial.layoutParams = ConstraintLayout.LayoutParams(side, side)
                 root.apply {
                     isFocusable = inCalculation
                     isClickable = inCalculation
@@ -45,7 +42,7 @@ class AdapterRecyclerMaterials(
                             context.theme.resolveAttribute(
                                 android.R.attr.selectableItemBackground, outValue, true
                             )
-                            foreground = context.getDrawable(outValue.resourceId)
+                            foreground = ContextCompat.getDrawable(context,outValue.resourceId)
                         }
                     }
                     setOnClickListener {
